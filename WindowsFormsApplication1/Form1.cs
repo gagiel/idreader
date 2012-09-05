@@ -355,11 +355,17 @@ namespace WindowsFormsApplication1
 
         private void btn_edit_Click(object sender, EventArgs e)
         {
-            int rid = Int16.Parse(dgv_recruit.SelectedRows[0].Cells["id"].Value.ToString());
-
-            FormRecruit fr = new FormRecruit(rid);
-            fr.Owner = this;
-            fr.ShowDialog();
+            try
+            {
+                int rid = Int16.Parse(dgv_recruit.SelectedRows[0].Cells["id"].Value.ToString());
+                FormRecruit fr = new FormRecruit(rid);
+                fr.Owner = this;
+                fr.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("编辑出现错误，请先选择要编辑的行。");
+            }      
         }
 
         private void btn_del_Click(object sender, EventArgs e)
@@ -527,7 +533,7 @@ namespace WindowsFormsApplication1
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "选择要导入的Excel";
-            ofd.Filter = "Excel(*.xlsx)|*.xlsx";
+            ofd.Filter = "Excel 2007(*.xlsx)|*.xlsx|Excel 97-2003(*.xls)|*.xls";
             ofd.ShowDialog();
             string xlsPath = ofd.FileName;
             if (!File.Exists(ofd.FileName))
@@ -540,63 +546,80 @@ namespace WindowsFormsApplication1
                 string strCon;
                 strCon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + xlsPath + "';Extended Properties='Excel 12.0;HDR=YES'";
                 OleDbConnection con = new OleDbConnection(strCon);
-                OleDbDataAdapter da = new OleDbDataAdapter("select * from [学生信息$]", con);
                 DataSet ds = new DataSet();
-                da.Fill(ds);
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                try
                 {
-                    string selectSql = "SELECT id FROM zd_zzmm WHERE mc = '" + dr[8].ToString() + "'";
-                    int zzmm = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT id FROM zd_xxxs WHERE mc = '" + dr[18].ToString() + "'";
-                    int xxxs = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT id FROM zd_sfjxs WHERE mc = '" + dr[23].ToString() + "'";
-                    int sfjxs = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT dm FROM zd_mz WHERE mc = '" + dr[7].ToString() + "'";
-                    int mz = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + dr[6].ToString() + "'";
-                    int xb = Int16.Parse(DB.excuteScalar(selectSql));
-
-
-                    selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + dr[10].ToString() + "'";
-                    int has = Int16.Parse(DB.excuteScalar(selectSql));
-                    if (has == 0)
-                    {
-                        string sqlStr = "INSERT INTO recruit(nf,bmh,xm,zkzh,jxzd,jxfdd,xb,mz,zzmm,csrq,sfzh,bysj,gzdw,byxx," +
-                           "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline) VALUES(@nf,@bmh,@xm,@zkzh," +
-                           "@jxzd,@jxfdd,@xb,@mz,@zzmm,@csrq,@sfzh,@bysj,@gzdw,@byxx,@byzdm,@bkzy,@bkfx,@bkcc,@xxxs," +
-                           "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline)";
-                        OleDbCommand cmd = new OleDbCommand();
-                        cmd.CommandText = sqlStr;
-                        cmd.Parameters.AddWithValue("@nf", dr[0].ToString());
-                        cmd.Parameters.AddWithValue("@bmh", dr[1].ToString());
-                        cmd.Parameters.AddWithValue("@xm", dr[2].ToString());
-                        cmd.Parameters.AddWithValue("@zkzh", dr[3].ToString());
-                        cmd.Parameters.AddWithValue("@jxzd", dr[4].ToString());
-                        cmd.Parameters.AddWithValue("@jxfdd", dr[5].ToString());
-                        cmd.Parameters.AddWithValue("@xb", xb);
-                        cmd.Parameters.AddWithValue("@mz", mz);
-                        cmd.Parameters.AddWithValue("@zzmm", zzmm);
-                        cmd.Parameters.AddWithValue("@csrq", dr[9].ToString());
-                        cmd.Parameters.AddWithValue("@sfzh", dr[10].ToString());
-                        cmd.Parameters.AddWithValue("@bysj", dr[11].ToString());
-                        cmd.Parameters.AddWithValue("@gzdw", dr[12].ToString());
-                        cmd.Parameters.AddWithValue("@byxx", dr[13].ToString());
-                        cmd.Parameters.AddWithValue("@byzdm", dr[14].ToString());
-                        cmd.Parameters.AddWithValue("@bkzy", dr[15].ToString());
-                        cmd.Parameters.AddWithValue("@bkfx", dr[16].ToString());
-                        cmd.Parameters.AddWithValue("@bkcc", dr[17].ToString());
-                        cmd.Parameters.AddWithValue("@xxxs", xxxs);
-                        cmd.Parameters.AddWithValue("@txdz", dr[19].ToString());
-                        cmd.Parameters.AddWithValue("@yzdm", dr[20].ToString());
-                        cmd.Parameters.AddWithValue("@lxdh", dr[21].ToString());
-                        cmd.Parameters.AddWithValue("@sjh", dr[22].ToString());
-                        cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
-                        cmd.Parameters.AddWithValue("@pc", this.pc);
-                        cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
-                        DB.excuteSql(cmd); //处理数据
-                    }
+                    OleDbDataAdapter da = new OleDbDataAdapter("select * from [学生信息$]", con);
+                    da.Fill(ds);
                 }
-               Bind(new Filter());
+                catch (Exception ex)
+                {
+                    OleDbDataAdapter da = new OleDbDataAdapter("select * from [sheet1$]", con);
+                    da.Fill(ds);
+                }
+
+                try
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        string selectSql = "SELECT id FROM zd_zzmm WHERE mc = '" + dr[8].ToString() + "'";
+                        int zzmm = Int16.Parse(DB.excuteScalar(selectSql));
+                        selectSql = "SELECT id FROM zd_xxxs WHERE mc = '" + dr[18].ToString() + "'";
+                        int xxxs = Int16.Parse(DB.excuteScalar(selectSql));
+                        selectSql = "SELECT id FROM zd_sfjxs WHERE mc = '" + dr[23].ToString() + "'";
+                        int sfjxs = Int16.Parse(DB.excuteScalar(selectSql));
+                        selectSql = "SELECT dm FROM zd_mz WHERE mc = '" + dr[7].ToString() + "'";
+                        int mz = Int16.Parse(DB.excuteScalar(selectSql));
+                        selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + dr[6].ToString() + "'";
+                        int xb = Int16.Parse(DB.excuteScalar(selectSql));
+
+
+                        selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + dr[10].ToString() + "'";
+                        int has = Int16.Parse(DB.excuteScalar(selectSql));
+                        if (has == 0)
+                        {
+                            string sqlStr = "INSERT INTO recruit(nf,bmh,xm,zkzh,jxzd,jxfdd,xb,mz,zzmm,csrq,sfzh,bysj,gzdw,byxx," +
+                               "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline) VALUES(@nf,@bmh,@xm,@zkzh," +
+                               "@jxzd,@jxfdd,@xb,@mz,@zzmm,@csrq,@sfzh,@bysj,@gzdw,@byxx,@byzdm,@bkzy,@bkfx,@bkcc,@xxxs," +
+                               "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline)";
+                            OleDbCommand cmd = new OleDbCommand();
+                            cmd.CommandText = sqlStr;
+                            cmd.Parameters.AddWithValue("@nf", dr[0].ToString());
+                            cmd.Parameters.AddWithValue("@bmh", dr[1].ToString());
+                            cmd.Parameters.AddWithValue("@xm", dr[2].ToString());
+                            cmd.Parameters.AddWithValue("@zkzh", dr[3].ToString());
+                            cmd.Parameters.AddWithValue("@jxzd", dr[4].ToString());
+                            cmd.Parameters.AddWithValue("@jxfdd", dr[5].ToString());
+                            cmd.Parameters.AddWithValue("@xb", xb);
+                            cmd.Parameters.AddWithValue("@mz", mz);
+                            cmd.Parameters.AddWithValue("@zzmm", zzmm);
+                            cmd.Parameters.AddWithValue("@csrq", dr[9].ToString());
+                            cmd.Parameters.AddWithValue("@sfzh", dr[10].ToString());
+                            cmd.Parameters.AddWithValue("@bysj", dr[11].ToString());
+                            cmd.Parameters.AddWithValue("@gzdw", dr[12].ToString());
+                            cmd.Parameters.AddWithValue("@byxx", dr[13].ToString());
+                            cmd.Parameters.AddWithValue("@byzdm", dr[14].ToString());
+                            cmd.Parameters.AddWithValue("@bkzy", dr[15].ToString());
+                            cmd.Parameters.AddWithValue("@bkfx", dr[16].ToString());
+                            cmd.Parameters.AddWithValue("@bkcc", dr[17].ToString());
+                            cmd.Parameters.AddWithValue("@xxxs", xxxs);
+                            cmd.Parameters.AddWithValue("@txdz", dr[19].ToString());
+                            cmd.Parameters.AddWithValue("@yzdm", dr[20].ToString());
+                            cmd.Parameters.AddWithValue("@lxdh", dr[21].ToString());
+                            cmd.Parameters.AddWithValue("@sjh", dr[22].ToString());
+                            cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
+                            cmd.Parameters.AddWithValue("@pc", this.pc);
+                            cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
+                            DB.excuteSql(cmd); //处理数据
+                        }
+                    }
+                    Bind(new Filter());
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                
             }
         }
     }

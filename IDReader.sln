@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{AAEE6E77-287F-4627-B446-81FA4445D8CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "idreader", "WindowsFormsApplication1\idreader.csproj", "{AAEE6E77-287F-4627-B446-81FA4445D8CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
