@@ -31,6 +31,7 @@ namespace WindowsFormsApplication1
             f.zy = tbzy.Text;
             f.sd = tbsd.Text;
             f.ed = tbed.Text;
+            f.a = comboBox1.SelectedItem.ToString();
             f1.Bind(f);
             Close();
         }

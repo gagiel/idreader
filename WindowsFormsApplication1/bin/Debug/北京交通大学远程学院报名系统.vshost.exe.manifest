@@ -96,24 +96,24 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="北京交通大学远程学院报名系统.exe" size="706560">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="北京交通大学远程学院报名系统.exe" size="708096">
       <assemblyIdentity name="北京交通大学远程学院报名系统" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ITVCvtEK8Jef+IgK7qFpUXQbR3M=</dsig:DigestValue>
+        <dsig:DigestValue>7bWZH0O90IOOmTdrp0OfKNljDco=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="db.mdb" size="1138688" writeableType="applicationData">
+  <file name="db.mdb" size="1204224" writeableType="applicationData">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>GB6lHS1VlPYhR1SqEwU++1vjSOU=</dsig:DigestValue>
+      <dsig:DigestValue>FJiRKBkYXeWFnE/SYYUzjp7vJPg=</dsig:DigestValue>
     </hash>
   </file>
   <file name="ico.ico" size="161862">

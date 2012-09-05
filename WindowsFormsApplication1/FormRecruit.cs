@@ -286,9 +286,9 @@ namespace WindowsFormsApplication1
                 if (rid == 0)
                 {
                     sqlStr = "INSERT INTO recruit(nf,bmh,xm,zkzh,jxzd,jxfdd,xb,mz,zzmm,csrq,sfzh,bysj,gzdw,byxx," +
-                        "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline) VALUES(@nf,@bmh,@xm,@zkzh," +
+                        "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline,avatar) VALUES(@nf,@bmh,@xm,@zkzh," +
                         "@jxzd,@jxfdd,@xb,@mz,@zzmm,@csrq,@sfzh,@bysj,@gzdw,@byxx,@byzdm,@bkzy,@bkfx,@bkcc,@xxxs," +
-                        "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline)";
+                        "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline,@avatar)";
                     OleDbCommand cmd = new OleDbCommand();
                     cmd.CommandText = sqlStr;
                     cmd.Parameters.AddWithValue("@nf", nf);
@@ -317,6 +317,14 @@ namespace WindowsFormsApplication1
                     cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
                     cmd.Parameters.AddWithValue("@pc", pc);
                     cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
+                    if (icard != null || pb_cun.Image != null)
+                    {                        
+                        cmd.Parameters.AddWithValue("@avatar", "有");
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", "");
+                    }
                     DB.excuteSql(cmd); //处理数据
                     if (icard != null) icard.saveImg(jxzd, pc, sfzh);//身份证图片
                     else if (pb_cun.Image != null) Form1.saveJpg(pb_cun.Image, jxzd, pc, sfzh);//上传的图片
@@ -329,7 +337,7 @@ namespace WindowsFormsApplication1
                         ", jxfdd = @jxfdd, xb = @xb, mz = @mz, zzmm = @zzmm, csrq = @csrq, sfzh = @sfzh, bysj = @bysj"+
                         ", gzdw = @gzdw, byxx = @byxx, byzdm = @byzdm, bkzy = @bkzy, bkfx = @bkfx, bkcc = @bkcc"+
                         ", xxxs = @xxxs, txdz = @txdz, yzdm = @yzdm, lxdh = @lxdh, sjh = @sjh, sfjxs = @sfjxs"+
-                        ", pc = @pc, dateline = @dateline WHERE id = " + rid;
+                        ", pc = @pc, dateline = @dateline, avatar=@avatar WHERE id = " + rid;
                     OleDbCommand cmd = new OleDbCommand();
                     cmd.CommandText = sqlStr;
                     cmd.Parameters.AddWithValue("@nf", nf);
@@ -358,6 +366,14 @@ namespace WindowsFormsApplication1
                     cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
                     cmd.Parameters.AddWithValue("@pc", pc);
                     cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
+                    if (pb_cun.Image != null && rePic)
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", "有");
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", "");
+                    }
                     DB.excuteSql(cmd); //处理数据
                     //if (icard != null) icard.saveImg(jxzd, pc, sfzh);//身份证图片
                     //else 

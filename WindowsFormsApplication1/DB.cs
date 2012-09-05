@@ -12,6 +12,7 @@ public class Filter
     public string zy;
     public string sd;
     public string ed;
+    public string a;
 }
     
 public class ComboboxItem

@@ -158,7 +158,7 @@ namespace WindowsFormsApplication1
             sqlStr = "SELECT '" + DateTime.Today.Year.ToString() + "', recruit.bmh, recruit.xm, recruit.zkzh, recruit.jxzd, recruit.jxfdd, zd_xb.mc AS xb, zd_mz.mc AS mz,  " +
                 "zd_zzmm.mc AS zzmm, recruit.csrq, recruit.sfzh, recruit.bysj, recruit.gzdw, recruit.byxx, recruit.byzdm, recruit.bkzy,  " +
                 "recruit.bkfx, recruit.bkcc, zd_xxxs.mc AS xxxs, recruit.txdz, recruit.yzdm, recruit.lxdh, recruit.sjh, zd_sfjxs.mc AS sfjxs,  " +
-                "recruit.dateline, recruit.id, recruit.pc " +
+                "recruit.dateline, recruit.id, recruit.pc, recruit.avatar " +
                 "FROM      (((((recruit INNER JOIN " +
                 "zd_mz ON recruit.mz = zd_mz.dm) INNER JOIN " +
                 "zd_sfjxs ON recruit.sfjxs = zd_sfjxs.ID) INNER JOIN " +
@@ -198,6 +198,21 @@ namespace WindowsFormsApplication1
             if (f.ed != null && f.ed != "")
             {
                 sqlStr += " AND recruit.dateline <= #" + f.ed + "#";
+            }
+            if (f.ed != null && f.ed != "")
+            {
+                sqlStr += " AND recruit.dateline <= #" + f.ed + "#";
+            }
+            if (f.a != null && f.a != "")
+            {
+                if (f.a == "有头像")
+                {
+                    sqlStr += " AND recruit.avatar = '有'";
+                }
+                else if (f.a == "无头像")
+                {
+                    sqlStr += " AND (recruit.avatar = '' OR recruit.avatar is null)";
+                }
             }
 
             System.Data.DataTable dt = DB.dataTable(sqlStr);
@@ -253,6 +268,7 @@ namespace WindowsFormsApplication1
             dgv_recruit.Columns[25].HeaderText = "报名日期";
             dgv_recruit.Columns[26].Visible = false;
             dgv_recruit.Columns[27].Visible = false;
+            dgv_recruit.Columns[28].HeaderText = "头像";
 
             dgv_recruit.AutoResizeColumns();
             dgv_recruit.AutoResizeColumnHeadersHeight();
@@ -337,7 +353,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception ex)
             {
-                MessageBox.Show("编辑出现错误，请先选择要编辑的行。");
+                MessageBox.Show("编辑出现错误，请先选择要编辑的行。" + ex.Message);
                 return;
             }      
         }
@@ -596,10 +612,9 @@ namespace WindowsFormsApplication1
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("导入失败，导入数据格式错误");
+                    MessageBox.Show("导入失败，导入数据格式错误。" + ex.Message);
                     return;
                 }
-                
             }
         }
     }
