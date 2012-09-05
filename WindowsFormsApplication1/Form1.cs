@@ -201,7 +201,7 @@ namespace WindowsFormsApplication1
             }
 
             System.Data.DataTable dt = DB.dataTable(sqlStr);
-            DataColumn Col = dt.Columns.Add("编号", System.Type.GetType("System.String"));
+            DataColumn Col = dt.Columns.Add("编号", System.Type.GetType("System.Int32"));
             Col.SetOrdinal(0);// to put the column in position 0;
             foreach(DataRow dr in dt.Rows)
             {
