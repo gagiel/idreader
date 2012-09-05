@@ -254,35 +254,8 @@ namespace WindowsFormsApplication1
             dgv_recruit.Columns[26].Visible = false;
             dgv_recruit.Columns[27].Visible = false;
 
-            dgv_recruit.Columns[0].Width = 100;
-            dgv_recruit.Columns[1].Width = 100;
-            dgv_recruit.Columns[2].Width = 100;
-            dgv_recruit.Columns[3].Width = 100;
-            dgv_recruit.Columns[4].Width = 100;
-            dgv_recruit.Columns[5].Width = 100;
-            dgv_recruit.Columns[6].Width = 100;
-            dgv_recruit.Columns[7].Width = 100;
-            dgv_recruit.Columns[8].Width = 100;
-            dgv_recruit.Columns[9].Width = 100;
-            dgv_recruit.Columns[10].Width = 100;
-            dgv_recruit.Columns[11].Width = 100;
-            dgv_recruit.Columns[12].Width = 100;
-            dgv_recruit.Columns[13].Width = 100;
-            dgv_recruit.Columns[14].Width = 100;
-            dgv_recruit.Columns[15].Width = 100;
-            dgv_recruit.Columns[16].Width = 100;
-            dgv_recruit.Columns[17].Width = 100;
-            dgv_recruit.Columns[18].Width = 100;
-            dgv_recruit.Columns[19].Width = 100;
-            dgv_recruit.Columns[20].Width = 100;
-            dgv_recruit.Columns[21].Width = 100;
-            dgv_recruit.Columns[22].Width = 100;
-            dgv_recruit.Columns[23].Width = 100;
-            dgv_recruit.Columns[24].Width = 100;
-            dgv_recruit.Columns[25].Width = 100;
-            dgv_recruit.Columns[26].Width = 100;
-
-
+            dgv_recruit.AutoResizeColumns();
+            dgv_recruit.AutoResizeColumnHeadersHeight();
         }
 
         public void initDb()
@@ -365,6 +338,7 @@ namespace WindowsFormsApplication1
             catch (Exception ex)
             {
                 MessageBox.Show("编辑出现错误，请先选择要编辑的行。");
+                return;
             }      
         }
 
@@ -507,6 +481,7 @@ namespace WindowsFormsApplication1
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "错误提示");
+                return;
             }
         }
 
@@ -531,6 +506,7 @@ namespace WindowsFormsApplication1
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
+
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "选择要导入的Excel";
             ofd.Filter = "Excel 2007(*.xlsx)|*.xlsx|Excel 97-2003(*.xls)|*.xls";
@@ -543,6 +519,7 @@ namespace WindowsFormsApplication1
             }
             else
             {
+                toolStripProgressBar1.Visible = true;
                 string strCon;
                 strCon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + xlsPath + "';Extended Properties='Excel 12.0;HDR=YES'";
                 OleDbConnection con = new OleDbConnection(strCon);
@@ -572,8 +549,7 @@ namespace WindowsFormsApplication1
                         int mz = Int16.Parse(DB.excuteScalar(selectSql));
                         selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + dr[6].ToString() + "'";
                         int xb = Int16.Parse(DB.excuteScalar(selectSql));
-
-
+                        
                         selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + dr[10].ToString() + "'";
                         int has = Int16.Parse(DB.excuteScalar(selectSql));
                         if (has == 0)
@@ -612,12 +588,16 @@ namespace WindowsFormsApplication1
                             cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
                             DB.excuteSql(cmd); //处理数据
                         }
+                        toolStripProgressBar1.Value += 100 / ds.Tables[0].Rows.Count;
                     }
                     Bind(new Filter());
+                    MessageBox.Show("导入成功");
+                    toolStripProgressBar1.Value = 0;
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    MessageBox.Show("导入失败，导入数据格式错误");
+                    return;
                 }
                 
             }

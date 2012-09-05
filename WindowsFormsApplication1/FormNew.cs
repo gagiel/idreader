@@ -25,10 +25,19 @@ namespace WindowsFormsApplication1
         private void btn_save_Click(object sender, EventArgs e)
         {
             ComboboxItem si = (ComboboxItem)cb_pc.SelectedItem;
-            if (si.Value.ToString() == "")
+            try
             {
+                if (si.Value.ToString() == "")
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("请选择，如果没有请先新建");
                 return;
             }
+            
             //sheet pc duplicate            
             string sqlStr = "SELECT count(*) FROM sheets WHERE pc = '" + si.Text + "'";
             int scount = Int16.Parse(DB.excuteScalar(sqlStr));
