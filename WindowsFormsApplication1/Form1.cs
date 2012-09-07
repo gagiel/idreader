@@ -106,6 +106,27 @@ namespace WindowsFormsApplication1
         }
         #endregion
 
+        public void checkJpg()
+        {
+            string sql = "select sfzh from recruit";
+            OleDbDataReader dr = DB.dataReader(sql);
+            string str = Application.StartupPath;
+            string exists = "";
+            while (dr.Read())
+            {
+                FileInfo file = new FileInfo(str + "/" + jxzd + "/" + pc + "/" + dr["sfzh"].ToString() + ".jpg");
+                if (file.Exists)
+                {
+                    exists += "'" + dr["sfzh"].ToString() + "',";
+                }
+            }
+            dr.Close();
+            sql = "UPDATE recruit SET avatar = '有' WHERE sfzh in (" + exists.Substring(0, exists.Length - 1) + ")";
+            DB.excuteSql(sql);
+            sql = "UPDATE recruit SET avatar = '' WHERE sfzh not in (" + exists.Substring(0, exists.Length - 1) + ")";
+            DB.excuteSql(sql);
+        }
+
         public static void saveJpg(Image img, string jxzd, string pc, string sfzh)
         {
             Bitmap bmp = new Bitmap(img);
@@ -205,6 +226,7 @@ namespace WindowsFormsApplication1
             }
             if (f.a != null && f.a != "")
             {
+                checkJpg();
                 if (f.a == "有头像")
                 {
                     sqlStr += " AND recruit.avatar = '有'";
@@ -339,7 +361,10 @@ namespace WindowsFormsApplication1
         {
             Filter f = new Filter();
             f.keywords = tb_query.Text;
-            f.a = cb_avatar.SelectedItem.ToString();
+            if (cb_avatar.SelectedItem!=null)
+            {
+                f.a = cb_avatar.SelectedItem.ToString();
+            }            
             Bind(f);
         }
 

@@ -96,14 +96,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="北京交通大学远程学院报名系统.exe" size="708096">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="北京交通大学远程学院报名系统.exe" size="709120">
       <assemblyIdentity name="北京交通大学远程学院报名系统" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>In1HF2LcJAH8Rucsk4N4zZ/6tTY=</dsig:DigestValue>
+        <dsig:DigestValue>ZqTDw71MOCzdVLMF6XA5IPBM2VE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
