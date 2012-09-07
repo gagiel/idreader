@@ -339,6 +339,7 @@ namespace WindowsFormsApplication1
         {
             Filter f = new Filter();
             f.keywords = tb_query.Text;
+            f.a = cb_avatar.SelectedItem.ToString();
             Bind(f);
         }
 
