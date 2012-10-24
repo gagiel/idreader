@@ -244,18 +244,53 @@ namespace WindowsFormsApplication1
             string bkzy = "";
             string bkfx = "";
             string bkcc = "";
-            if ((ComboboxItem)cbbkzy.SelectedItem != null)
+            try
             {
-                 bkzy = ((ComboboxItem)cbbkzy.SelectedItem).Value.ToString();
+                if ((ComboboxItem)cbbkzy.SelectedItem != null)
+                {
+                    bkzy = ((ComboboxItem)cbbkzy.SelectedItem).Value.ToString();
+                }
+                else
+                {
+                    bkzy = cbbkzy.Text;
+                }
             }
-            if ((ComboboxItem)cbbkfx.SelectedItem != null)
+            catch (Exception ex)
             {
-                 bkfx = ((ComboboxItem)cbbkfx.SelectedItem).Value.ToString();
+                bkcc = "";
             }
-            if ((ComboboxItem)cbbkcc.SelectedItem != null)
+            
+            try
             {
-                 bkcc = ((ComboboxItem)cbbkcc.SelectedItem).Value.ToString();
+                if ((ComboboxItem)cbbkfx.SelectedItem != null)
+                {
+                     bkfx = ((ComboboxItem)cbbkfx.SelectedItem).Value.ToString();
+                }
+                else
+                {
+                    bkfx = cbbkfx.Text;
+                }
             }
+            catch (Exception ex)
+            {
+                bkfx = "";
+            }
+            try
+            {
+                if ((ComboboxItem)cbbkcc.SelectedItem != null)
+                {
+                    bkcc = ((ComboboxItem)cbbkcc.SelectedItem).Value.ToString();
+                }
+                else
+                {
+                    bkcc = cbbkcc.Text;
+                }
+            }
+            catch (Exception ex)
+            {
+                bkcc = "";
+            }
+
             int xxxs = Int16.Parse(cbxxxs.SelectedValue.ToString());
             string txdz = tbtxdz.Text;
             string yzdm = tbyzdm.Text;
@@ -383,6 +418,19 @@ namespace WindowsFormsApplication1
                 }
                 rePic = false;
                 MessageBox.Show("录入报名信息成功");
+
+                sqlStr = "SELECT count(*) FROM zd_zb WHERE xwzd = '" + jxzd + "' AND zy = '" + bkzy + "' AND fx ='" + bkfx + "' AND cc = '" + bkcc + "'";
+                if (DB.excuteScalar(sqlStr) == "0")
+                {
+                    sqlStr = "INSERT INTO zd_zb(xwzd, zy, fx, cc) VALUES(@xwzd, @zy, @fx, @cc);";
+                    OleDbCommand cmd = new OleDbCommand();
+                    cmd.CommandText = sqlStr;
+                    cmd.Parameters.AddWithValue("@xwzd", jxzd);
+                    cmd.Parameters.AddWithValue("@zy", bkzy);
+                    cmd.Parameters.AddWithValue("@fx", bkfx);
+                    cmd.Parameters.AddWithValue("@cc", bkcc);
+                    DB.excuteSql(cmd); //处理数据
+                }
             }
         }
 

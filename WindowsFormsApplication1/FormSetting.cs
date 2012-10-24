@@ -26,10 +26,19 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string sqlStr = "UPDATE config SET jxzd = '" + cb_jxzd.SelectedValue.ToString() + "', jxfdd = '" + tb_jxfdd.Text + "'";
+            string jxzd = "";
+            try
+            {
+                jxzd = cb_jxzd.SelectedValue.ToString();
+            }
+            catch (Exception ex)
+            {
+                jxzd = cb_jxzd.Text;
+            }
+            string sqlStr = "UPDATE config SET jxzd = '" + jxzd + "', jxfdd = '" + tb_jxfdd.Text + "'";
             DB.excuteSql(sqlStr);
             Form1 f = (Form1)Owner;
-            f.jxzd = cb_jxzd.SelectedValue.ToString();
+            f.jxzd = jxzd;
             f.jxfdd = tb_jxfdd.Text;
             Close();
         }
