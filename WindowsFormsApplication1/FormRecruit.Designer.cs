@@ -422,6 +422,8 @@
             // 
             // cbmz
             // 
+            this.cbmz.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbmz.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbmz.DataSource = this.zdmzBindingSource;
             this.cbmz.DisplayMember = "mc";
             this.cbmz.FormattingEnabled = true;
@@ -443,6 +445,8 @@
             // 
             // cbxb
             // 
+            this.cbxb.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbxb.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxb.DataSource = this.zdxbBindingSource;
             this.cbxb.DisplayMember = "mc";
             this.cbxb.FormattingEnabled = true;
@@ -459,6 +463,8 @@
             // 
             // cbzzmm
             // 
+            this.cbzzmm.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbzzmm.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbzzmm.DataSource = this.zdzzmmBindingSource;
             this.cbzzmm.DisplayMember = "mc";
             this.cbzzmm.FormattingEnabled = true;
@@ -475,6 +481,8 @@
             // 
             // cbbkcc
             // 
+            this.cbbkcc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbbkcc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbbkcc.FormattingEnabled = true;
             this.cbbkcc.Location = new System.Drawing.Point(83, 133);
             this.cbbkcc.Name = "cbbkcc";
@@ -483,6 +491,8 @@
             // 
             // cbsfjxs
             // 
+            this.cbsfjxs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbsfjxs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbsfjxs.DataSource = this.zdsfjxsBindingSource;
             this.cbsfjxs.DisplayMember = "mc";
             this.cbsfjxs.FormattingEnabled = true;
@@ -669,6 +679,8 @@
             // 
             // cbbkzy
             // 
+            this.cbbkzy.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbbkzy.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbbkzy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbbkzy.FormattingEnabled = true;
             this.cbbkzy.Location = new System.Drawing.Point(83, 107);
@@ -678,6 +690,8 @@
             // 
             // cbbkfx
             // 
+            this.cbbkfx.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbbkfx.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbbkfx.FormattingEnabled = true;
             this.cbbkfx.Location = new System.Drawing.Point(363, 107);
             this.cbbkfx.Name = "cbbkfx";
@@ -686,6 +700,8 @@
             // 
             // cbxxxs
             // 
+            this.cbxxxs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbxxxs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbxxxs.DataSource = this.zdxxxsBindingSource;
             this.cbxxxs.DisplayMember = "mc";
             this.cbxxxs.FormattingEnabled = true;

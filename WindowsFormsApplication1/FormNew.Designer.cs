@@ -46,6 +46,8 @@
             // 
             // cb_pc
             // 
+            this.cb_pc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cb_pc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cb_pc.FormattingEnabled = true;
             this.cb_pc.Location = new System.Drawing.Point(14, 30);
             this.cb_pc.Name = "cb_pc";

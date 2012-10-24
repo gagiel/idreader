@@ -24,9 +24,11 @@ namespace WindowsFormsApplication1
 
         private void btn_save_Click(object sender, EventArgs e)
         {
+            string pc = "";
             ComboboxItem si = (ComboboxItem)cb_pc.SelectedItem;
             try
             {
+                pc = si.Text;
                 if (si.Value.ToString() == "")
                 {
                     return;
@@ -34,32 +36,31 @@ namespace WindowsFormsApplication1
             }
             catch (Exception ex)
             {
-                MessageBox.Show("请选择，如果没有请先新建");
-                return;
+                pc = cb_pc.Text;
             }
             
             //sheet pc duplicate            
-            string sqlStr = "SELECT count(*) FROM sheets WHERE pc = '" + si.Text + "'";
+            string sqlStr = "SELECT count(*) FROM sheets WHERE pc = '" + pc + "'";
             int scount = Int16.Parse(DB.excuteScalar(sqlStr));
             Form1 f = (Form1)this.Owner;
             if (scount > 0)
             {
                 //open this
-                sqlStr = "UPDATE config SET pc = '" + si.Text + "'";
+                sqlStr = "UPDATE config SET pc = '" + pc + "'";
                 DB.excuteSql(sqlStr);
                 //start recruit
             }
             else
             {
                 //insert sheet
-                sqlStr = "INSERT INTO sheets(pc) VALUES('" + si.Text + "')";
+                sqlStr = "INSERT INTO sheets(pc) VALUES('" + pc + "')";
                 DB.excuteSql(sqlStr);
                 //open this
-                sqlStr = "UPDATE config SET pc = '" + si.Text + "'";
+                sqlStr = "UPDATE config SET pc = '" + pc + "'";
                 DB.excuteSql(sqlStr);
                 //start recruit
             }
-            f.pc = si.Text;
+            f.pc = pc;
             f.startRecruit();
             Close();
         }

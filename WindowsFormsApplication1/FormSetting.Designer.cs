@@ -49,6 +49,8 @@
             // 
             // cb_jxzd
             // 
+            this.cb_jxzd.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cb_jxzd.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cb_jxzd.FormattingEnabled = true;
             this.cb_jxzd.Location = new System.Drawing.Point(13, 25);
             this.cb_jxzd.Name = "cb_jxzd";

@@ -5,12 +5,6 @@ C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\�
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\北京交通大学远程学院报名系统.exe
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\北京交通大学远程学院报名系统.pdb
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\ICSharpCode.SharpZipLib.dll
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\Microsoft.Office.Interop.Excel.dll
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\office.dll
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\Microsoft.Vbe.Interop.dll
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\Microsoft.Office.Interop.Excel.xml
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\bin\Debug\office.xml
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.FormCreate.resources
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.FormNew.resources
@@ -19,9 +13,11 @@ C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debu
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.FormRecruit.resources
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.FormSetting.resources
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\GenerateResource.read.1.tlog
-C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\北京交通大学远程学院报名系统.exe.manifest
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\北京交通大学远程学院报名系统.application
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\北京交通大学远程学院报名系统.exe
 C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\北京交通大学远程学院报名系统.pdb
+C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\idreader.csprojResolveAssemblyReference.cache
+C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\idreader.csproj.GenerateResource.Cache
+C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\idreader.csproj.ResolveComReference.cache
+C:\Users\zhouxin\Documents\GitHub\idreader\WindowsFormsApplication1\obj\x86\Debug\Interop.MSDAOSP.dll
