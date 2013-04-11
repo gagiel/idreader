@@ -110,6 +110,23 @@ public class DB
         { closeConnection(); }
     }//执行sql语句
 
+    public static void prepareSql(OleDbCommand cmd)
+    {
+        try
+        {
+            openConnection();
+            cmd.Connection = conn;
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+        finally
+        { closeConnection(); }
+    }//执行sql语句
+
     public static void excuteSql(OleDbCommand cmd)
     {
         try

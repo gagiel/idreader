@@ -41,8 +41,29 @@ namespace WindowsFormsApplication1
 
         public static ICard readCard()
         {
+            CloseComm();
             int ic = 0;
             ic = InitComm(1001);
+            if (ic != 1)
+            {
+                MessageBox.Show("没有检查到可用的读卡器");
+                ic = InitComm(1002);
+                MessageBox.Show("测试USB2中...");
+            }
+            if (ic != 1)
+            {
+                ic = InitComm(1003);
+                MessageBox.Show("测试USB3中...");
+            }
+            if (ic != 1)
+            {
+                ic = InitComm(1004);
+                MessageBox.Show("测试USB4中...");
+            }
+            if (ic != 1)
+            {
+                MessageBox.Show("没有连接可用的读卡器");
+            }
             int li_ret = 0;
             li_ret = Authenticate();
             Read_Content(1);
@@ -575,43 +596,42 @@ namespace WindowsFormsApplication1
                 ImportData();
             }
         }
-
+        public string get_string(object str)
+        {
+            try
+            {
+                return str.ToString().Trim();
+            }
+            catch
+            {
+                return "";
+            }
+        }
         public void ImportData()
         {
-            string strCon;
-            strCon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + xlsPath + "';Extended Properties='Excel 12.0;HDR=YES'";
-            OleDbConnection con = new OleDbConnection(strCon);
-            DataSet ds = new DataSet();
+            Excel.Application ObjExcel = new Excel.Application();
+            Excel.Workbook ObjWorkBook;
+            Excel.Worksheet ObjWorkSheet;
+            ObjWorkBook = ObjExcel.Workbooks.Open(xlsPath, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            ObjWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)ObjWorkBook.Sheets[1];
             try
             {
-                OleDbDataAdapter da = new OleDbDataAdapter("select * from [学生信息$]", con);
-                da.Fill(ds);
-            }
-            catch (Exception ex)
-            {
-                OleDbDataAdapter da = new OleDbDataAdapter("select * from [sheet1$]", con);
-                da.Fill(ds);
-            }
 
-            try
-            {
-                int row_count = 0;
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                for (int i = 2; i <= ObjWorkSheet.UsedRange.Rows.Count; i++)
                 {
-                    row_count += 1;
-                    toolStripStatusLabel1.Text = "正在导入..." + row_count + "/" + ds.Tables[0].Rows.Count;
-                    string selectSql = "SELECT id FROM zd_zzmm WHERE mc = '" + dr[8].ToString() + "'";
+                    toolStripStatusLabel1.Text = "正在导入..." + i + "/" + ObjWorkSheet.UsedRange.Rows.Count;
+                    string selectSql = "SELECT id FROM zd_zzmm WHERE mc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 9]).Value2) + "'";
                     int zzmm = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT id FROM zd_xxxs WHERE mc = '" + dr[18].ToString() + "'";
+                    selectSql = "SELECT id FROM zd_xxxs WHERE mc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 19]).Value2) + "'";
                     int xxxs = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT id FROM zd_sfjxs WHERE mc = '" + dr[23].ToString() + "'";
+                    selectSql = "SELECT id FROM zd_sfjxs WHERE mc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 24]).Value2) + "'";
                     int sfjxs = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT dm FROM zd_mz WHERE mc = '" + dr[7].ToString() + "'";
+                    selectSql = "SELECT dm FROM zd_mz WHERE mc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 8]).Value2) + "'";
                     int mz = Int16.Parse(DB.excuteScalar(selectSql));
-                    selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + dr[6].ToString() + "'";
+                    selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 7]).Value2) + "'";
                     int xb = Int16.Parse(DB.excuteScalar(selectSql));
 
-                    selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + dr[10].ToString() + "'";
+                    selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 11]).Value2) + "'";
                     int has = Int16.Parse(DB.excuteScalar(selectSql));
                     if (has == 0)
                     {
@@ -619,62 +639,161 @@ namespace WindowsFormsApplication1
                            "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline) VALUES(@nf,@bmh,@xm,@zkzh," +
                            "@jxzd,@jxfdd,@xb,@mz,@zzmm,@csrq,@sfzh,@bysj,@gzdw,@byxx,@byzdm,@bkzy,@bkfx,@bkcc,@xxxs," +
                            "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline)";
-                        OleDbCommand cmd = new OleDbCommand();
-                        cmd.CommandText = sqlStr;
-                        cmd.Parameters.AddWithValue("@nf", dr[0].ToString());
-                        cmd.Parameters.AddWithValue("@bmh", dr[1].ToString());
-                        cmd.Parameters.AddWithValue("@xm", dr[2].ToString());
-                        cmd.Parameters.AddWithValue("@zkzh", dr[3].ToString());
-                        cmd.Parameters.AddWithValue("@jxzd", jxzd);
-                        cmd.Parameters.AddWithValue("@jxfdd", dr[5].ToString());
-                        cmd.Parameters.AddWithValue("@xb", xb);
-                        cmd.Parameters.AddWithValue("@mz", mz);
-                        cmd.Parameters.AddWithValue("@zzmm", zzmm);
-                        cmd.Parameters.AddWithValue("@csrq", dr[9].ToString());
-                        cmd.Parameters.AddWithValue("@sfzh", dr[10].ToString());
-                        cmd.Parameters.AddWithValue("@bysj", dr[11].ToString());
-                        cmd.Parameters.AddWithValue("@gzdw", dr[12].ToString());
-                        cmd.Parameters.AddWithValue("@byxx", dr[13].ToString());
-                        cmd.Parameters.AddWithValue("@byzdm", dr[14].ToString());
-                        cmd.Parameters.AddWithValue("@bkzy", dr[15].ToString());
-                        cmd.Parameters.AddWithValue("@bkfx", dr[16].ToString());
-                        cmd.Parameters.AddWithValue("@bkcc", dr[17].ToString());
-                        cmd.Parameters.AddWithValue("@xxxs", xxxs);
-                        cmd.Parameters.AddWithValue("@txdz", dr[19].ToString());
-                        cmd.Parameters.AddWithValue("@yzdm", dr[20].ToString());
-                        cmd.Parameters.AddWithValue("@lxdh", dr[21].ToString());
-                        cmd.Parameters.AddWithValue("@sjh", dr[22].ToString());
-                        cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
-                        cmd.Parameters.AddWithValue("@pc", this.pc);
-                        cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
-                        DB.excuteSql(cmd); //处理数据
+                        OleDbCommand bat_cmd = new OleDbCommand();
+                        bat_cmd.CommandText = sqlStr;
+                        bat_cmd.Parameters.AddWithValue("@nf", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 1]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@bmh", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 2]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@xm", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 3]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@zkzh", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 4]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@jxzd", jxzd);
+                        bat_cmd.Parameters.AddWithValue("@jxfdd", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 6]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@xb", xb);
+                        bat_cmd.Parameters.AddWithValue("@mz", mz);
+                        bat_cmd.Parameters.AddWithValue("@zzmm", zzmm);
+                        bat_cmd.Parameters.AddWithValue("@csrq", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 10]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@sfzh", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 11]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@bysj", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 12]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@gzdw", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 13]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@byxx", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 14]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@byzdm", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 15]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@bkzy", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 16]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@bkfx", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 17]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@bkcc", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 18]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@xxxs", xxxs);
+                        bat_cmd.Parameters.AddWithValue("@txdz", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 20]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@yzdm", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 21]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@lxdh", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 22]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@sjh", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 23]).Value2));
+                        bat_cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
+                        bat_cmd.Parameters.AddWithValue("@pc", this.pc);
+                        bat_cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
+                        DB.excuteSql(bat_cmd);
 
-                        sqlStr = "SELECT count(*) FROM zd_zb WHERE xwzd = '" + jxzd + "' AND zy = '" + dr[15].ToString() + "' AND fx ='" + dr[16].ToString() + "' AND cc = '" + dr[17].ToString() + "'";
-                        if(DB.excuteScalar(sqlStr) == "0"){
+                        sqlStr = "SELECT count(*) FROM zd_zb WHERE xwzd = '" + jxzd + "' AND zy = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 16]).Value2) + "' AND fx ='" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 17]).Value2) + "' AND cc = '" + get_string(((Excel.Range)ObjWorkSheet.Cells[i, 18]).Value2) + "'";
+                        if (DB.excuteScalar(sqlStr) == "0")
+                        {
                             sqlStr = "INSERT INTO zd_zb(xwzd, zy, fx, cc) VALUES(@xwzd, @zy, @fx, @cc);";
-                            cmd = new OleDbCommand();
+                            OleDbCommand cmd = new OleDbCommand();
                             cmd.CommandText = sqlStr;
                             cmd.Parameters.AddWithValue("@xwzd", jxzd);
-                            cmd.Parameters.AddWithValue("@zy", dr[15].ToString());
-                            cmd.Parameters.AddWithValue("@fx", dr[16].ToString());
-                            cmd.Parameters.AddWithValue("@cc", dr[17].ToString());
+                            cmd.Parameters.AddWithValue("@zy", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 16]).Value2));
+                            cmd.Parameters.AddWithValue("@fx", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 17]).Value2));
+                            cmd.Parameters.AddWithValue("@cc", get_string(((Excel.Range)ObjWorkSheet.Cells[i, 18]).Value2));
                             DB.excuteSql(cmd); //处理数据
                         }
                     }
-                    toolStripProgressBar2.Value = ((row_count * 100) / ds.Tables[0].Rows.Count);
-                    Application.DoEvents(); 
+                    toolStripProgressBar2.Value = ((i * 100) / ObjWorkSheet.UsedRange.Rows.Count);
+                    Application.DoEvents();
+
                 }
                 Bind(new Filter());
                 MessageBox.Show("导入成功");
                 toolStripProgressBar2.Value = 0;
                 toolStripStatusLabel1.Text = "就绪";
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("导入失败，导入数据格式错误。" + ex.Message);
                 return;
             }
+            
+            //string strCon;
+            //strCon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + xlsPath + "';Extended Properties='Excel 12.0;HDR=YES'";
+            //OleDbConnection con = new OleDbConnection(strCon);
+            //DataSet ds = new DataSet();
+            //try
+            //{
+            //    OleDbDataAdapter da = new OleDbDataAdapter("select * from [学生信息$]", con);
+            //    da.Fill(ds);
+            //}
+            //catch (Exception ex)
+            //{
+            //    OleDbDataAdapter da = new OleDbDataAdapter("select * from [sheet1$]", con);
+            //    da.Fill(ds);
+            //}
+
+            //try
+            //{
+            //    int row_count = 0;
+            //    foreach (DataRow dr in ds.Tables[0].Rows)
+            //    {
+            //        row_count += 1;
+            //        toolStripStatusLabel1.Text = "正在导入..." + row_count + "/" + ds.Tables[0].Rows.Count;
+            //        string selectSql = "SELECT id FROM zd_zzmm WHERE mc = '" + dr[8].ToString() + "'";
+            //        int zzmm = Int16.Parse(DB.excuteScalar(selectSql));
+            //        selectSql = "SELECT id FROM zd_xxxs WHERE mc = '" + dr[18].ToString() + "'";
+            //        int xxxs = Int16.Parse(DB.excuteScalar(selectSql));
+            //        selectSql = "SELECT id FROM zd_sfjxs WHERE mc = '" + dr[23].ToString() + "'";
+            //        int sfjxs = Int16.Parse(DB.excuteScalar(selectSql));
+            //        selectSql = "SELECT dm FROM zd_mz WHERE mc = '" + dr[7].ToString() + "'";
+            //        int mz = Int16.Parse(DB.excuteScalar(selectSql));
+            //        selectSql = "SELECT dm FROM zd_xb WHERE mc = '" + dr[6].ToString() + "'";
+            //        int xb = Int16.Parse(DB.excuteScalar(selectSql));
+
+            //        selectSql = "SELECT count(*) FROM recruit WHERE sfzh = '" + dr[10].ToString() + "'";
+            //        int has = Int16.Parse(DB.excuteScalar(selectSql));
+            //        if (has == 0)
+            //        {
+            //            string sqlStr = "INSERT INTO recruit(nf,bmh,xm,zkzh,jxzd,jxfdd,xb,mz,zzmm,csrq,sfzh,bysj,gzdw,byxx," +
+            //               "byzdm,bkzy,bkfx,bkcc,xxxs,txdz,yzdm,lxdh,sjh,sfjxs,pc,dateline) VALUES(@nf,@bmh,@xm,@zkzh," +
+            //               "@jxzd,@jxfdd,@xb,@mz,@zzmm,@csrq,@sfzh,@bysj,@gzdw,@byxx,@byzdm,@bkzy,@bkfx,@bkcc,@xxxs," +
+            //               "@txdz,@yzdm,@lxdh,@sjh,@sfjxs,@pc,@dateline)";
+            //            OleDbCommand cmd = new OleDbCommand();
+            //            cmd.CommandText = sqlStr;
+            //            cmd.Parameters.AddWithValue("@nf", dr[0].ToString());
+            //            cmd.Parameters.AddWithValue("@bmh", dr[1].ToString());
+            //            cmd.Parameters.AddWithValue("@xm", dr[2].ToString());
+            //            cmd.Parameters.AddWithValue("@zkzh", dr[3].ToString());
+            //            cmd.Parameters.AddWithValue("@jxzd", jxzd);
+            //            cmd.Parameters.AddWithValue("@jxfdd", dr[5].ToString());
+            //            cmd.Parameters.AddWithValue("@xb", xb);
+            //            cmd.Parameters.AddWithValue("@mz", mz);
+            //            cmd.Parameters.AddWithValue("@zzmm", zzmm);
+            //            cmd.Parameters.AddWithValue("@csrq", dr[9].ToString());
+            //            cmd.Parameters.AddWithValue("@sfzh", dr[10].ToString());
+            //            cmd.Parameters.AddWithValue("@bysj", dr[11].ToString());
+            //            cmd.Parameters.AddWithValue("@gzdw", dr[12].ToString());
+            //            cmd.Parameters.AddWithValue("@byxx", dr[13].ToString());
+            //            cmd.Parameters.AddWithValue("@byzdm", dr[14].ToString());
+            //            cmd.Parameters.AddWithValue("@bkzy", dr[15].ToString());
+            //            cmd.Parameters.AddWithValue("@bkfx", dr[16].ToString());
+            //            cmd.Parameters.AddWithValue("@bkcc", dr[17].ToString());
+            //            cmd.Parameters.AddWithValue("@xxxs", xxxs);
+            //            cmd.Parameters.AddWithValue("@txdz", dr[19].ToString());
+            //            cmd.Parameters.AddWithValue("@yzdm", dr[20].ToString());
+            //            cmd.Parameters.AddWithValue("@lxdh", dr[21].ToString());
+            //            cmd.Parameters.AddWithValue("@sjh", dr[22].ToString());
+            //            cmd.Parameters.AddWithValue("@sfjxs", sfjxs);
+            //            cmd.Parameters.AddWithValue("@pc", this.pc);
+            //            cmd.Parameters.AddWithValue("@dateline", DateTime.Today);
+            //            DB.excuteSql(cmd); //处理数据
+
+            //            sqlStr = "SELECT count(*) FROM zd_zb WHERE xwzd = '" + jxzd + "' AND zy = '" + dr[15].ToString() + "' AND fx ='" + dr[16].ToString() + "' AND cc = '" + dr[17].ToString() + "'";
+            //            if(DB.excuteScalar(sqlStr) == "0"){
+            //                sqlStr = "INSERT INTO zd_zb(xwzd, zy, fx, cc) VALUES(@xwzd, @zy, @fx, @cc);";
+            //                cmd = new OleDbCommand();
+            //                cmd.CommandText = sqlStr;
+            //                cmd.Parameters.AddWithValue("@xwzd", jxzd);
+            //                cmd.Parameters.AddWithValue("@zy", dr[15].ToString());
+            //                cmd.Parameters.AddWithValue("@fx", dr[16].ToString());
+            //                cmd.Parameters.AddWithValue("@cc", dr[17].ToString());
+            //                DB.excuteSql(cmd); //处理数据
+            //            }
+            //        }
+            //        toolStripProgressBar2.Value = ((row_count * 100) / ds.Tables[0].Rows.Count);
+            //        Application.DoEvents(); 
+            //    }
+            //    Bind(new Filter());
+            //    MessageBox.Show("导入成功");
+            //    toolStripProgressBar2.Value = 0;
+            //    toolStripStatusLabel1.Text = "就绪";
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("导入失败，导入数据格式错误。" + ex.Message);
+            //    return;
+            //}
         }
 
         private void dgv_recruit_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

@@ -54,9 +54,18 @@ namespace WindowsFormsApplication1
                     rid = Int16.Parse(dr["id"].ToString());
                     dr.Close();
                     this.FormRecruit_Load(this, null);
+                    tbxm.Text = icard.name;
+                    cbxb.SelectedValue = icard.sex;
+                    cbmz.SelectedValue = Int16.Parse(icard.ethnic).ToString();
+                    tbsfzh.Text = icard.idcardno;
+                    tbcsrq.Text = icard.birthday;
+                    tbtxdz.Text = icard.address;
+                    pb_cun.Image = icard.img;
+                    btn_pic.Visible = false;
                 }
                 else
                 {
+                    rid = 0;
                     dr.Close();
                     tbxm.Text = icard.name;
                     cbxb.SelectedValue = icard.sex;
@@ -409,11 +418,18 @@ namespace WindowsFormsApplication1
                     {
                         cmd.Parameters.AddWithValue("@avatar", "");
                     }
-                    DB.excuteSql(cmd); //处理数据
-                    //if (icard != null) icard.saveImg(jxzd, pc, sfzh);//身份证图片
-                    //else 
-                    if (pb_cun.Image != null && rePic) Form1.saveJpg(pb_cun.Image, jxzd, pc, sfzh);//上传的图片
+                    // 照片
+                    if (icard != null)
+                    {
+                        icard.saveImg(jxzd, pc, sfzh);//身份证图片
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@avatar", "有");
+                        if (pb_cun.Image != null && rePic) Form1.saveJpg(pb_cun.Image, jxzd, pc, sfzh);//上传的图片
+                    }
                     clearCard();
+                    DB.excuteSql(cmd); //处理数据
                     fowner.startRecruit();
                 }
                 rePic = false;
